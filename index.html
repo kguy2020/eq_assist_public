@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EqAssist Solo — The barn management app that replaces the notebook</title>
+<meta name="description" content="EqAssist Solo is the offline-first barn management app built for one trainer or one barn manager who never wants to forget anything about their horses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Josefin+Sans:wght@300;400;500;600&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0b1526;
+    --navy-900:#0f1b30;
+    --navy-800:#16253f;
+    --navy-700:#22344f;
+    --gold-500:#c9a24c;
+    --gold-400:#d9b66a;
+    --gold-300:#e8cf9a;
+    --cream-50:#f8f4ea;
+    --cream-100:#f1ead9;
+    --ink-900:#1c1a15;
+    --ink-700:#4a4438;
+    --ink-500:#7a7263;
+    --hair:#e2d8c2;
+    --success:#3f7a53;
+    --max-w:1120px;
+    --font-display:'Playfair Display', Georgia, serif;
+    --font-body:'Josefin Sans', 'Segoe UI', sans-serif;
+    --font-label:'Raleway', 'Segoe UI', sans-serif;
+  }
+
+  :root[data-theme="dark"]{
+    --page-bg: var(--navy-950);
+    --card-bg: var(--navy-800);
+    --text-primary: var(--cream-50);
+    --text-secondary: #b9b2a0;
+    --hair-line: rgba(201,162,76,0.25);
+  }
+  :root[data-theme="light"]{
+    --page-bg: var(--cream-50);
+    --card-bg: #ffffff;
+    --text-primary: var(--ink-900);
+    --text-secondary: var(--ink-700);
+    --hair-line: var(--hair);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --page-bg: var(--navy-950);
+      --card-bg: var(--navy-800);
+      --text-primary: var(--cream-50);
+      --text-secondary: #b9b2a0;
+      --hair-line: rgba(201,162,76,0.25);
+    }
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --page-bg: var(--cream-50);
+      --card-bg: #ffffff;
+      --text-primary: var(--ink-900);
+      --text-secondary: var(--ink-700);
+      --hair-line: var(--hair);
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy-950);
+    color:var(--cream-50);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0;text-wrap:balance;}
+  .eyebrow{
+    font-family:var(--font-label);
+    font-size:12.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold-400);
+    font-weight:600;
+  }
+  .wrap{max-width:var(--max-w);margin:0 auto;padding:0 28px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:40;
+    background:rgba(11,21,38,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(201,162,76,0.16);
+  }
+  .nav-inner{
+    max-width:var(--max-w); margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .brand svg{width:30px;height:30px;flex-shrink:0;}
+  .brand-word{font-family:var(--font-display); font-size:20px; color:var(--cream-50); letter-spacing:0.01em;}
+  .brand-word b{color:var(--gold-400); font-weight:600;}
+  .nav-cta{
+    font-family:var(--font-label); font-size:13px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--navy-950); background:var(--gold-400);
+    padding:10px 20px; border-radius:999px; text-decoration:none;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(201,162,76,0.35);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 96px;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(201,162,76,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(201,162,76,0.10), transparent 55%),
+      var(--navy-950);
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:var(--max-w); margin:0 auto; padding:0 28px;
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(34px, 4.4vw, 54px);
+    color:var(--cream-50);
+    line-height:1.08;
+    margin:18px 0 22px;
+  }
+  .hero h1 em{color:var(--gold-400); font-style:italic;}
+  .hero p.lede{
+    font-size:18px; color:#c7c0ae; max-width:480px; margin:0 0 32px;
+  }
+  .hero-actions{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--font-label); font-weight:600; font-size:14px;
+    letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--navy-950); background:linear-gradient(135deg, var(--gold-300), var(--gold-500));
+    padding:15px 30px; border-radius:999px; text-decoration:none;
+    box-shadow:0 10px 30px rgba(201,162,76,0.25);
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 34px rgba(201,162,76,0.35);}
+  .hero-note{font-size:13.5px; color:#8d8672;}
+  .hero-note strong{color:var(--gold-400); font-weight:500;}
+
+  .phone-stage{position:relative; display:flex; justify-content:center;}
+  .phone{
+    position:relative; width:260px; border-radius:38px;
+    background:var(--navy-900);
+    padding:10px;
+    box-shadow:
+      0 40px 80px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(201,162,76,0.25),
+      inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .phone img{border-radius:28px; width:100%; display:block;}
+  .phone-glow{
+    position:absolute; inset:-40px; z-index:-1;
+    background:radial-gradient(circle, rgba(201,162,76,0.28), transparent 65%);
+    filter:blur(10px);
+  }
+  .badge-float{
+    position:absolute; background:var(--card-bg); color:var(--text-primary);
+    border:1px solid var(--hair-line); border-radius:14px;
+    padding:12px 16px; font-family:var(--font-label); font-size:12.5px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.35);
+    display:flex; align-items:center; gap:8px;
+  }
+  .badge-float.top{top:6%; right:-6%;}
+  .badge-float.bottom{bottom:8%; left:-10%;}
+  .badge-float svg{width:16px;height:16px;flex-shrink:0;color:var(--gold-500);}
+  .badge-float strong{font-weight:600; display:block; font-size:13px;}
+  .badge-float span{color:var(--text-secondary); font-size:11.5px;}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:96px 0;}
+  .section-head{max-width:640px; margin:0 auto 56px; text-align:center;}
+  .section-head h2{font-size:clamp(28px,3.2vw,38px); margin:14px 0 16px; color:var(--text-primary);}
+  .section-head p{color:var(--text-secondary); font-size:16.5px;}
+
+  /* ---------- PITCH (dark) ---------- */
+  .pitch{background:var(--navy-950); border-top:1px solid rgba(201,162,76,0.14);}
+  .pitch .section-head h2{color:var(--cream-50);}
+  .pitch .section-head p{color:#b9b2a0;}
+  .pitch-quote{
+    max-width:760px; margin:0 auto; text-align:center;
+    font-family:var(--font-display); font-style:italic; font-weight:500;
+    font-size:clamp(22px,2.6vw,30px); color:var(--gold-300); line-height:1.4;
+  }
+
+  /* ---------- FEATURES (light) ---------- */
+  .features{background:var(--cream-50); color:var(--ink-900);}
+  :root[data-theme="dark"] .features{background:var(--navy-900); color:var(--cream-50);}
+  @media (prefers-color-scheme: dark){ .features{background:var(--navy-900); color:var(--cream-50);} }
+  .features .section-head h2{color:inherit;}
+  .features .section-head p{color:var(--ink-700);}
+  @media (prefers-color-scheme: dark){ .features .section-head p{color:#b9b2a0;} }
+  :root[data-theme="dark"] .features .section-head p{color:#b9b2a0;}
+
+  .grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;
+  }
+  .card{
+    background:#ffffff; border:1px solid var(--hair);
+    border-radius:18px; padding:30px 26px;
+  }
+  @media (prefers-color-scheme: dark){
+    .card{background:var(--navy-800); border-color:rgba(201,162,76,0.18);}
+  }
+  :root[data-theme="dark"] .card{background:var(--navy-800); border-color:rgba(201,162,76,0.18);}
+  .card-icon{
+    width:44px; height:44px; border-radius:12px;
+    background:linear-gradient(135deg, rgba(201,162,76,0.18), rgba(201,162,76,0.06));
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+  }
+  .card-icon svg{width:22px; height:22px; color:var(--gold-500);}
+  .card h3{font-size:19px; margin-bottom:8px; color:inherit;}
+  .card p{font-size:15px; color:var(--ink-700); margin:0;}
+  @media (prefers-color-scheme: dark){ .card p{color:#a9a290;} }
+  :root[data-theme="dark"] .card p{color:#a9a290;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{background:var(--navy-950); border-top:1px solid rgba(201,162,76,0.14);}
+  .gallery .section-head h2{color:var(--cream-50);}
+  .gallery .section-head p{color:#b9b2a0;}
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:32px;
+    align-items:start;
+  }
+  .gallery-item{margin:0; text-align:center;}
+  .phone-small{width:100%; max-width:220px; margin:0 auto;}
+  .gallery-item figcaption{
+    margin-top:18px; font-family:var(--font-label); font-size:13.5px;
+    color:#a9a290; letter-spacing:0.01em;
+  }
+
+  /* ---------- DIFFERENTIATOR STRIP ---------- */
+  .strip{
+    background:linear-gradient(120deg, var(--navy-900), var(--navy-800));
+    border-top:1px solid rgba(201,162,76,0.16);
+    border-bottom:1px solid rgba(201,162,76,0.16);
+  }
+  .strip-inner{
+    max-width:var(--max-w); margin:0 auto; padding:56px 28px;
+    display:grid; grid-template-columns:auto 1fr; gap:36px; align-items:center;
+  }
+  .strip-icon{
+    width:76px; height:76px; border-radius:20px;
+    background:rgba(201,162,76,0.12); border:1px solid rgba(201,162,76,0.3);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .strip-icon svg{width:38px; height:38px; color:var(--gold-400);}
+  .strip h3{color:var(--cream-50); font-size:22px; margin-bottom:8px;}
+  .strip p{color:#b9b2a0; margin:0; font-size:15.5px; max-width:640px;}
+  .strip .eyebrow{display:block; margin-bottom:6px;}
+
+  /* ---------- PRICING ---------- */
+  .pricing{background:var(--cream-50); color:var(--ink-900);}
+  @media (prefers-color-scheme: dark){ .pricing{background:var(--navy-950); color:var(--cream-50);} }
+  :root[data-theme="dark"] .pricing{background:var(--navy-950); color:var(--cream-50);}
+  .pricing .section-head p{color:var(--ink-700);}
+  @media (prefers-color-scheme: dark){ .pricing .section-head p{color:#b9b2a0;} }
+  :root[data-theme="dark"] .pricing .section-head p{color:#b9b2a0;}
+
+  .price-card{
+    max-width:440px; margin:0 auto; text-align:center;
+    background:#ffffff; border:1px solid var(--hair); border-radius:22px;
+    padding:44px 36px; box-shadow:0 20px 50px rgba(28,26,21,0.08);
+  }
+  @media (prefers-color-scheme: dark){
+    .price-card{background:var(--navy-800); border-color:rgba(201,162,76,0.2); box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+  }
+  :root[data-theme="dark"] .price-card{background:var(--navy-800); border-color:rgba(201,162,76,0.2); box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+  .price-card .trial{
+    font-family:var(--font-label); font-size:13px; font-weight:600;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-500);
+    background:rgba(201,162,76,0.12); border:1px solid rgba(201,162,76,0.3);
+    display:inline-block; padding:6px 16px; border-radius:999px; margin-bottom:20px;
+  }
+  .price-card .amount{
+    font-family:var(--font-display); font-size:56px; font-weight:700; color:inherit;
+    line-height:1;
+  }
+  .price-card .amount sup{font-size:22px; top:-22px; position:relative; font-weight:600;}
+  .price-card .amount-note{font-size:14px; color:var(--ink-500); margin:10px 0 26px;}
+  @media (prefers-color-scheme: dark){ .price-card .amount-note{color:#8d8672;} }
+  :root[data-theme="dark"] .price-card .amount-note{color:#8d8672;}
+  .price-list{list-style:none; margin:0 0 30px; padding:0; text-align:left;}
+  .price-list li{
+    display:flex; gap:10px; align-items:flex-start;
+    padding:9px 0; border-bottom:1px solid var(--hair); font-size:15px;
+  }
+  @media (prefers-color-scheme: dark){ .price-list li{border-color:rgba(201,162,76,0.14);} }
+  :root[data-theme="dark"] .price-list li{border-color:rgba(201,162,76,0.14);}
+  .price-list li:last-child{border-bottom:none;}
+  .price-list svg{width:17px;height:17px;flex-shrink:0;margin-top:3px;color:var(--success);}
+  .launch-tag{
+    font-family:var(--font-label); font-size:13px; color:var(--ink-500);
+    margin-top:18px;
+  }
+  @media (prefers-color-scheme: dark){ .launch-tag{color:#8d8672;} }
+  :root[data-theme="dark"] .launch-tag{color:#8d8672;}
+  .launch-tag strong{color:var(--gold-500);}
+
+  /* ---------- SIGNUP ---------- */
+  .signup{
+    background:var(--navy-950);
+    border-top:1px solid rgba(201,162,76,0.16);
+    position:relative;
+    overflow:hidden;
+  }
+  .signup::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 700px 400px at 50% 0%, rgba(201,162,76,0.14), transparent 60%);
+  }
+  .signup-inner{position:relative; max-width:600px; margin:0 auto; text-align:center; padding:0 28px;}
+  .signup h2{color:var(--cream-50); font-size:clamp(26px,3vw,36px); margin:14px 0 14px;}
+  .signup p{color:#b9b2a0; font-size:16px; margin:0 0 36px;}
+
+  .ml-form-shell{
+    background:var(--navy-800); border:1px solid rgba(201,162,76,0.22);
+    border-radius:18px; padding:32px; text-align:left;
+  }
+  .ml-fallback{
+    display:flex; gap:12px; flex-wrap:wrap;
+  }
+  .ml-fallback input[type="email"]{
+    flex:1; min-width:220px;
+    background:var(--navy-900); border:1px solid rgba(201,162,76,0.28);
+    border-radius:10px; padding:14px 16px; color:var(--cream-50);
+    font-family:var(--font-body); font-size:15px;
+  }
+  .ml-fallback input[type="email"]::placeholder{color:#7d7767;}
+  .ml-fallback input[type="email"]:focus{outline:2px solid var(--gold-400); outline-offset:2px;}
+  .ml-fallback button{
+    font-family:var(--font-label); font-weight:600; font-size:13px;
+    letter-spacing:0.05em; text-transform:uppercase;
+    background:linear-gradient(135deg, var(--gold-300), var(--gold-500));
+    color:var(--navy-950); border:none; border-radius:10px;
+    padding:0 26px; cursor:pointer;
+    transition:transform 0.15s ease;
+  }
+  .ml-fallback button:hover{transform:translateY(-1px);}
+  .ml-fallback button:focus-visible, .ml-fallback input:focus-visible{outline:2px solid var(--gold-400); outline-offset:2px;}
+  .ml-setup-note{
+    margin-top:16px; font-size:12.5px; color:#8d8672; font-family:var(--font-label);
+    border-top:1px dashed rgba(201,162,76,0.25); padding-top:14px;
+  }
+  .form-status{font-size:13.5px; margin-top:12px; min-height:18px; color:var(--gold-300);}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--navy-950); border-top:1px solid rgba(201,162,76,0.14);
+    padding:40px 0;
+  }
+  .footer-inner{
+    max-width:var(--max-w); margin:0 auto; padding:0 28px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .footer-inner .brand-word{font-size:16px;}
+  .footer-links{display:flex; gap:24px; flex-wrap:wrap;}
+  .footer-links a{
+    font-family:var(--font-label); font-size:13px; color:#9a927e;
+    text-decoration:none; letter-spacing:0.02em;
+  }
+  .footer-links a:hover{color:var(--gold-400);}
+  .footer-copy{font-size:12.5px; color:#6d6656; width:100%; margin-top:8px; font-family:var(--font-label);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 880px){
+    .hero-inner{grid-template-columns:1fr; gap:52px; text-align:center;}
+    .hero p.lede{margin-left:auto; margin-right:auto;}
+    .hero-actions{justify-content:center;}
+    .phone-stage{order:-1;}
+    .badge-float{display:none;}
+    .grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:1fr; max-width:260px; margin:0 auto;}
+    .strip-inner{grid-template-columns:1fr; text-align:center; justify-items:center;}
+    .footer-inner{flex-direction:column; text-align:center;}
+  }
+  @media (max-width: 520px){
+    section{padding:64px 0;}
+    .hero{padding:56px 0 64px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="assets/logo.png" alt="EqAssist Solo horse-head logo" width="30" height="30" style="border-radius:6px;">
+      <span class="brand-word">Eq<b>Assist</b> Solo</span>
+    </a>
+    <a class="nav-cta" href="#signup">Get Notified</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow">Launching August 7, 2026</span>
+      <h1>The barn app that finally <em>eliminates the notebook.</em></h1>
+      <p class="lede">EqAssist Solo keeps every horse's feed, medications, shows, and documents in one place — built for the one trainer or barn manager who never wants to forget anything again.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#signup">
+          Join the Launch List
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <span class="hero-note">Free 7-day trial · <strong>$65 once</strong>, no subscription</span>
+      </div>
+    </div>
+    <div class="phone-stage">
+      <div class="phone-glow"></div>
+      <div class="phone">
+        <img src="assets/screenshot-onboarding.jpg" alt="EqAssist Solo onboarding screen showing the app's logo and barn setup form">
+      </div>
+      <div class="badge-float top">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span><strong>Blanket check</strong><span>34°F tonight — medium weight</span></span>
+      </div>
+      <div class="badge-float bottom">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span><strong>All data stored</strong><span>on this device only</span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="pitch">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why it exists</span>
+      <h2>The guiding question for every feature</h2>
+    </div>
+    <p class="pitch-quote">&ldquo;Does this save me from rewriting my notebook or updating the whiteboard?&rdquo;<br>If yes, we build it. If no, we don't.</p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Everything, in one app</span>
+      <h2>Built around the barn's actual day</h2>
+      <p>Not a generic horse database — a working tool for feed time, med rounds, show mornings, and everything in between.</p>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <h3>Feed &amp; Hay, at a Glance</h3>
+        <p>AM and PM feed, hay, and supplements for every horse — the Feeding Quick-Reference shows the whole barn's chart on one screen.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <h3>Medical Care, Never Missed</h3>
+        <p>A persistent daily dose tracker for medications and supplements, so nothing gets skipped and nothing gets doubled up.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3v18M6 4h11l-2 4 2 4H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Show Days, Handled</h3>
+        <p>Entries, classes, and per-show task and equipment checklists — so show morning is about riding, not remembering.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3h7l4 4v14H7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v4h4M10 13l1.5 1.5L15 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Documents, Signed and Sent</h3>
+        <p>Upload from camera, photos, or files; sign a Coggins or a bill of sale on the spot; email it straight to the owner.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19 20v-2a4 4 0 0 0-3-3.87M15 3.13A4 4 0 0 1 15 10.87" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Clients &amp; Barn, Organized</h3>
+        <p>A client roster, a visual barn stall map, and pasture tracking — the full operation, not just the horses.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Private, by Design</h3>
+        <p>No account, no login, no server. Every record lives on your device — nothing leaves except a weather check.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">See it in the barn</span>
+      <h2>Real screens, real barn</h2>
+      <p>No mockups — this is EqAssist Solo, mid-use.</p>
+    </div>
+    <div class="gallery-grid">
+      <figure class="gallery-item">
+        <div class="phone phone-small"><img src="assets/screenshot-home.jpg" alt="EqAssist Solo home dashboard showing the weekly calendar and Activity or Care button"></div>
+        <figcaption>Home dashboard &amp; weekly schedule</figcaption>
+      </figure>
+      <figure class="gallery-item">
+        <div class="phone phone-small"><img src="assets/screenshot-equipment.jpg" alt="EqAssist Solo show equipment checklist grouped by Tack, Grooming, and Medical"></div>
+        <figcaption>Show-day equipment checklist</figcaption>
+      </figure>
+      <figure class="gallery-item">
+        <div class="phone phone-small"><img src="assets/screenshot-barn.jpg" alt="EqAssist Solo barn management screen showing default show tasks, equipment lists, and feed types"></div>
+        <figcaption>Barn defaults &amp; feed types</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.6"/></svg>
+    </div>
+    <div>
+      <span class="eyebrow">The one thing no one else has</span>
+      <h3>Blanket recommendations, built from real weather</h3>
+      <p>EqAssist Solo checks tonight's forecast and tells you what each horse should wear — the kind of daily judgment call that usually lives in a trainer's head, now built into the app.</p>
+    </div>
+  </div>
+</div>
+
+<section class="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Simple pricing</span>
+      <h2>One price. No subscription.</h2>
+      <p>Try the whole app free for a week. If it earns a permanent place in your barn routine, unlock it once.</p>
+    </div>
+    <div class="price-card">
+      <span class="trial">7-Day Free Trial</span>
+      <div class="amount"><sup>$</sup>65</div>
+      <p class="amount-note">one time — yours forever, no renewal</p>
+      <ul class="price-list">
+        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited horses and clients</li>
+        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Every feature, no tiers or add-ons</li>
+        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>No account, no data leaving your device</li>
+        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>One purchase, works across app updates</li>
+      </ul>
+      <p class="launch-tag">iOS and Android — <strong>launching August 7, 2026</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="signup" id="signup">
+  <div class="signup-inner">
+    <span class="eyebrow">Be first to know</span>
+    <h2>Join the launch list</h2>
+    <p>One email when EqAssist Solo goes live — nothing else, ever.</p>
+
+    <div class="ml-form-shell">
+      <!--
+        BEEHIIV EMBED GOES HERE.
+        Replace this fallback <form> with the exact embed snippet from
+        Beehiiv → Settings → Integrations → Subscribe Forms & Embeds →
+        create a form → Embed. It will look like:
+          <iframe src="https://embeds.beehiiv.com/YOUR-FORM-ID?slim=true"
+            data-test-id="beehiiv-embed" height="52" frameborder="0"
+            scrolling="no" style="margin:0;border-radius:0;background-color:transparent;">
+          </iframe>
+        Paste it in place of the .ml-fallback form below, keep the
+        surrounding .ml-form-shell div and its styling.
+      -->
+      <form class="ml-fallback" id="launch-form" onsubmit="return false;">
+        <input type="email" id="launch-email" placeholder="you@yourbarn.com" required aria-label="Email address">
+        <button type="submit">Notify Me</button>
+      </form>
+      <p class="form-status" id="form-status" role="status"></p>
+      <p class="ml-setup-note">Setup note: this form is a placeholder — it isn't connected to Beehiiv yet. Swap in the real embed code above once the Beehiiv form is created.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <span class="brand" style="display:flex;align-items:center;gap:10px;">
+      <img src="assets/logo.png" alt="" width="24" height="24" style="border-radius:5px;">
+      <span class="brand-word">Eq<b style="color:var(--gold-400); font-weight:600;">Assist</b> Solo</span>
+    </span>
+    <div class="footer-links">
+      <a href="eqassist-solo-privacy-policy.html">Privacy Policy</a>
+      <a href="mailto:katierwguy2020@gmail.com">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 CL Leisure Management. EqAssist Solo is a product in development — features and launch date subject to change.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('launch-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var status = document.getElementById('form-status');
+    status.textContent = 'Form not connected yet — see setup note below.';
+  });
+</script>
+
+</body>
+</html>
