@@ -332,34 +332,22 @@
 
   .ml-form-shell{
     background:var(--navy-800); border:1px solid rgba(201,162,76,0.22);
-    border-radius:18px; padding:32px; text-align:left;
+    border-radius:18px; padding:36px; text-align:center;
   }
-  .ml-fallback{
-    display:flex; gap:12px; flex-wrap:wrap;
-  }
-  .ml-fallback input[type="email"]{
-    flex:1; min-width:220px;
-    background:var(--navy-900); border:1px solid rgba(201,162,76,0.28);
-    border-radius:10px; padding:14px 16px; color:var(--cream-50);
-    font-family:var(--font-body); font-size:15px;
-  }
-  .ml-fallback input[type="email"]::placeholder{color:#7d7767;}
-  .ml-fallback input[type="email"]:focus{outline:2px solid var(--gold-400); outline-offset:2px;}
-  .ml-fallback button{
-    font-family:var(--font-label); font-weight:600; font-size:13px;
+  .ml-subscribe-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--font-label); font-weight:600; font-size:14px;
     letter-spacing:0.05em; text-transform:uppercase;
-    background:linear-gradient(135deg, var(--gold-300), var(--gold-500));
-    color:var(--navy-950); border:none; border-radius:10px;
-    padding:0 26px; cursor:pointer;
-    transition:transform 0.15s ease;
+    color:var(--navy-950); background:linear-gradient(135deg, var(--gold-300), var(--gold-500));
+    padding:16px 32px; border-radius:999px; text-decoration:none;
+    box-shadow:0 10px 30px rgba(201,162,76,0.25);
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
   }
-  .ml-fallback button:hover{transform:translateY(-1px);}
-  .ml-fallback button:focus-visible, .ml-fallback input:focus-visible{outline:2px solid var(--gold-400); outline-offset:2px;}
+  .ml-subscribe-btn:hover{transform:translateY(-2px); box-shadow:0 14px 34px rgba(201,162,76,0.35);}
+  .ml-subscribe-btn:focus-visible{outline:2px solid var(--gold-400); outline-offset:3px;}
   .ml-setup-note{
-    margin-top:16px; font-size:12.5px; color:#8d8672; font-family:var(--font-label);
-    border-top:1px dashed rgba(201,162,76,0.25); padding-top:14px;
+    margin-top:18px; font-size:13px; color:#a9a290; font-family:var(--font-label);
   }
-  .form-status{font-size:13.5px; margin-top:12px; min-height:18px; color:var(--gold-300);}
 
   /* ---------- FOOTER ---------- */
   footer{
@@ -577,24 +565,11 @@
     <p>One email when EqAssist Solo goes live — nothing else, ever.</p>
 
     <div class="ml-form-shell">
-      <!--
-        BEEHIIV EMBED GOES HERE.
-        Replace this fallback <form> with the exact embed snippet from
-        Beehiiv → Settings → Integrations → Subscribe Forms & Embeds →
-        create a form → Embed. It will look like:
-          <iframe src="https://embeds.beehiiv.com/YOUR-FORM-ID?slim=true"
-            data-test-id="beehiiv-embed" height="52" frameborder="0"
-            scrolling="no" style="margin:0;border-radius:0;background-color:transparent;">
-          </iframe>
-        Paste it in place of the .ml-fallback form below, keep the
-        surrounding .ml-form-shell div and its styling.
-      -->
-      <form class="ml-fallback" id="launch-form" onsubmit="return false;">
-        <input type="email" id="launch-email" placeholder="you@yourbarn.com" required aria-label="Email address">
-        <button type="submit">Notify Me</button>
-      </form>
-      <p class="form-status" id="form-status" role="status"></p>
-      <p class="ml-setup-note">Setup note: this form is a placeholder — it isn't connected to Beehiiv yet. Swap in the real embed code above once the Beehiiv form is created.</p>
+      <a class="ml-subscribe-btn" href="https://eqassistsubscribers.beehiiv.com/" target="_blank" rel="noopener noreferrer">
+        Subscribe for Launch Updates
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <p class="ml-setup-note">Opens EqAssist's subscribe page in a new tab — one email field, no account needed.</p>
     </div>
   </div>
 </section>
@@ -612,14 +587,6 @@
     <p class="footer-copy">&copy; 2026 CL Leisure Management. EqAssist Solo is a product in development — features and launch date subject to change.</p>
   </div>
 </footer>
-
-<script>
-  document.getElementById('launch-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    var status = document.getElementById('form-status');
-    status.textContent = 'Form not connected yet — see setup note below.';
-  });
-</script>
 
 </body>
 </html>
